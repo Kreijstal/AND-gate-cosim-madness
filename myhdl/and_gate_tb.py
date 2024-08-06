@@ -13,7 +13,7 @@ def find_myhdl_vpi():
     raise FileNotFoundError("myhdl.vpi not found. Please run 'python -m myhdl.conversion.iverilog' to generate it.")
 
 def and_gate_verilog(a, b, y):
-    cmd = "iverilog -o and_gate_myhdl.vvp and_gate.v and_gate_myhdl.v"
+    cmd = "iverilog -o and_gate_myhdl.vvp ../common/and_gate.v and_gate_myhdl.v"
     if os.system(cmd) != 0:
         raise RuntimeError("Verilog compilation failed")
 
