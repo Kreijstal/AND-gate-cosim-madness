@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: kreijstal/install-verilator-action@main
 
     - name: Install HDL tools and dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y verilator ghdl iverilog python3-pip
+        sudo apt-get install -y ghdl iverilog python3-pip
         pip3 install --upgrade pip
 
     - name: Run make run
