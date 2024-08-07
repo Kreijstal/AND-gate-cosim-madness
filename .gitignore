@@ -1,0 +1,68 @@
+# Compiled object files
+*.o
+*.obj
+
+# Compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Verilator
+obj_dir/
+
+# GHDL
+*.cf
+*.ghw
+
+# Icarus Verilog
+*.vvp
+*.vpi
+*.vcd
+
+# MyHDL
+myhdl/
+*.pyc
+__pycache__/
+
+# Temporary files
+*.log
+*.tmp
+
+# Editor-specific files
+.vscode/
+*.swp
+*~
+
+# Build directories
+build/
+bin/
+
+# Generated files
+*.gen
+
+# Waveform files
+*.vcd
+*.fst
+*.lxt
+
+# Backup files
+*.bak
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Project-specific executables (based on your Makefiles)
+and_gate_tb
+Vand_gate_proxy
+Vand_gate_tb
+
+# Ignore all files in the root directory without extension (likely executables)
+/*
+!/*/
+!*.*
