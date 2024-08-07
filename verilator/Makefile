@@ -1,6 +1,6 @@
 # Variables for Verilator
 VERILATOR = verilator
-VERILATOR_FLAGS = --main --binary -Wall -Wno-TIMESCALEMOD
+VERILATOR_FLAGS = --main --exe --build -Wall -Wno-TIMESCALEMOD --timing
 
 # Sources
 SRC_DIR = ../common
