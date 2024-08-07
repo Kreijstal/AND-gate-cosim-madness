@@ -3,12 +3,19 @@ IVERILOG_VPI = iverilog-vpi
 IVERILOG = iverilog
 VVP = vvp
 
-VERILATOR_ROOT = /usr/share/verilator
+# Detect Verilator root
+ifeq ($(shell test -d /usr/local/share/verilator && echo 1),1)
+    VERILATOR_ROOT = /usr/local/share/verilator
+else ifeq ($(shell test -d /usr/share/verilator && echo 1),1)
+    VERILATOR_ROOT = /usr/share/verilator
+else
+    $(error Verilator root directory not found. Please install Verilator or set VERILATOR_ROOT manually.)
+endif
+
 VERILATOR_FLAGS = -Wall --cc -CFLAGS -fPIC
 CFLAGS = -Wall -g -I$(VERILATOR_ROOT)/include -Iobj_dir -fPIC
 CXXFLAGS = $(CFLAGS) -std=c++14 -faligned-new
 LDFLAGS = -L$(VERILATOR_ROOT)/include -L./obj_dir
-
 VPI_SRC = and_gate_vpi.c
 WRAPPER_SRC = and_gate_vpi_wrapper.cpp
 VPI_OUT = and_gate_vpi.vpi
@@ -20,6 +27,7 @@ VVP_EXEC = and_gate_tb.vvp
 .PHONY: all clean run
 
 all: run
+
 build: $(VVP_EXEC)
 
 obj_dir/Vand_gate.cpp: $(VERILOG_SRC)
