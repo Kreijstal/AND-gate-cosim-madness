@@ -14,9 +14,12 @@ ifeq ($(DETECTED_OS),Windows)
     POSSIBLE_VERILATOR_ROOTS = $(MSYSTEM_PREFIX)/local/share/verilator $(MSYSTEM_PREFIX)/share/verilator
     MINGW_DIR = $(MSYSTEM_PREFIX)
     IVERILOG_DIR = $(MINGW_DIR)
+    VPI_INCLUDE_DIR = $(MINGW_DIR)/include/iverilog
 else
     POSSIBLE_VERILATOR_ROOTS = /usr/local/share/verilator /usr/share/verilator
-    IVERILOG_DIR = /usr/local
+    POSSIBLE_IVERILOG_DIRS = /usr /usr/local
+    IVERILOG_DIR = $(firstword $(foreach dir,$(POSSIBLE_IVERILOG_DIRS),$(wildcard $(dir)/include/iverilog)))
+    VPI_INCLUDE_DIR = $(IVERILOG_DIR)
 endif
 
 # Find the first existing Verilator root
@@ -26,10 +29,16 @@ ifeq ($(VERILATOR_ROOT),)
     $(error Verilator root directory not found. Please install Verilator or set VERILATOR_ROOT manually.)
 endif
 
+ifeq ($(DETECTED_OS),Linux)
+    ifeq ($(IVERILOG_DIR),)
+        $(error Icarus Verilog directory not found. Please install Icarus Verilog or set IVERILOG_DIR manually.)
+    endif
+endif
+
 VERILATOR_FLAGS = -Wall --cc -CFLAGS "-fPIC -DVL_TIME_CONTEXT"
-CFLAGS = -Wall -g -I$(VERILATOR_ROOT)/include -I$(IVERILOG_DIR)/include/iverilog -Iobj_dir -fPIC -DVL_TIME_CONTEXT
+CFLAGS = -Wall -g -I$(VERILATOR_ROOT)/include -I$(VPI_INCLUDE_DIR) -Iobj_dir -fPIC -DVL_TIME_CONTEXT
 CXXFLAGS = $(CFLAGS) -std=c++14 -faligned-new
-LDFLAGS = -L$(VERILATOR_ROOT)/include -L$(IVERILOG_DIR)/lib -L./obj_dir
+LDFLAGS = -L$(VERILATOR_ROOT)/include -L$(IVERILOG_DIR)/../lib -L./obj_dir
 
 VPI_SRC = and_gate_vpi.c
 WRAPPER_SRC = and_gate_vpi_wrapper.cpp
@@ -47,7 +56,7 @@ ifeq ($(DETECTED_OS),Windows)
     CC = gcc
     CXX = g++
     SHARED = -shared
-    VPI_CFLAGS = -I$(MINGW_DIR)/include/iverilog -D__MINGW32__
+    VPI_CFLAGS = -I$(VPI_INCLUDE_DIR) -D__MINGW32__
     VPI_LDFLAGS = -L$(MINGW_DIR)/lib -lvpi -lveriuser
 else
     MKDIR = mkdir -p
@@ -56,9 +65,13 @@ else
     CC = gcc
     CXX = g++
     SHARED = -shared
-    VPI_CFLAGS = -I$(IVERILOG_DIR)/include/iverilog -fPIC
-    VPI_LDFLAGS = -L$(IVERILOG_DIR)/lib -lvpi -lveriuser
+    VPI_CFLAGS = -I$(VPI_INCLUDE_DIR) -fPIC
+    VPI_LDFLAGS = -L$(IVERILOG_DIR)/../lib -lvpi -lveriuser
 endif
+
+# Debug prints
+$(info IVERILOG_DIR = $(IVERILOG_DIR))
+$(info VPI_INCLUDE_DIR = $(VPI_INCLUDE_DIR))
 
 .PHONY: all clean run
 
@@ -85,7 +98,7 @@ obj_dir/and_gate_vpi.o: $(VPI_SRC) and_gate_vpi_wrapper.h | obj_dir
 	$(CC) $(CFLAGS) $(VPI_CFLAGS) -c $< -o $@
 
 $(VPI_OUT): obj_dir/and_gate_vpi.o obj_dir/and_gate_vpi_wrapper.o obj_dir/Vand_gate__ALL.o obj_dir/libverilated.a
-	$(CXX) $(SHARED) -o $@ $^ $(LDFLAGS) $(VPI_LDFLAGS) -lverilated -lpthread
+	$(CXX) $(SHARED) -o $@ $^ $(LDFLAGS) $(VPI_LDFLAGS) -lverilated -lpthread -lvpi
 
 $(VVP_EXEC): $(VERILOG_PROXY) $(VERILOG_TB) $(VPI_OUT)
 	$(IVERILOG) -o $@ -m./$(VPI_OUT) $(VERILOG_PROXY) $(VERILOG_TB)
