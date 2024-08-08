@@ -35,7 +35,7 @@ ifeq ($(DETECTED_OS),Linux)
     endif
 endif
 
-VERILATOR_FLAGS = -Wall --cc -CFLAGS "-fPIC -DVL_TIME_CONTEXT"
+VERILATOR_FLAGS = -Wall --cc -CFLAGS -fPIC -CFLAGS -DVL_TIME_CONTEXT
 CFLAGS = -Wall -g -I$(VERILATOR_ROOT)/include -I$(VPI_INCLUDE_DIR) -Iobj_dir -fPIC -DVL_TIME_CONTEXT
 CXXFLAGS = $(CFLAGS) -std=c++14 -faligned-new
 LDFLAGS = -L$(VERILATOR_ROOT)/include -L$(IVERILOG_DIR)/../lib -L./obj_dir
@@ -56,7 +56,7 @@ ifeq ($(DETECTED_OS),Windows)
     CC = gcc
     CXX = g++
     SHARED = -shared
-    VPI_CFLAGS = -I$(VPI_INCLUDE_DIR) -D__MINGW32__
+    VPI_CFLAGS = -I$(VPI_INCLUDE_DIR) 
     VPI_LDFLAGS = -L$(MINGW_DIR)/lib -lvpi -lveriuser
 else
     MKDIR = mkdir -p
