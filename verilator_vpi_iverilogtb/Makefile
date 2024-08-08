@@ -73,9 +73,17 @@ endif
 $(info IVERILOG_DIR = $(IVERILOG_DIR))
 $(info VPI_INCLUDE_DIR = $(VPI_INCLUDE_DIR))
 
-.PHONY: all clean run
+# Set default target based on OS
+ifeq ($(DETECTED_OS),Windows)
+    .DEFAULT_GOAL := build #see https://github.com/steveicarus/iverilog/issues/1157
+else
+    .DEFAULT_GOAL := run
+endif
 
-all: run
+
+.PHONY: all clean run build
+
+all: $(.DEFAULT_GOAL)
 
 build: $(VVP_EXEC)
 
