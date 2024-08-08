@@ -4,7 +4,8 @@
 VERILATOR = verilator
 
 # Verilator flags
-VERILATOR_FLAGS = --cc --exe --sv
+VERILATOR_FLAGS = --cc --exe --sv -CFLAGS -DVL_TIME_CONTEXT
+
 
 # Source files
 VERILOG_SRC = and_gate_proxy.sv
