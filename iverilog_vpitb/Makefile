@@ -5,11 +5,26 @@ VERILOG_SRCS = ../common/and_gate.v and_gate_tb_wrapper.v
 VVP_EXEC = and_gate_tb.vvp
 VCD_FILE = and_gate.vcd
 
+# Detect OS
+ifeq ($(OS),Windows_NT)
+    DETECTED_OS := Windows
+else
+    DETECTED_OS := $(shell uname -s)
+endif
+
 # Compiler and flags
 IVERILOG_VPI = iverilog-vpi
 IVERILOG = iverilog
 VVP = vvp
 CFLAGS = -Wall -Wextra -g
+
+# OS-specific settings
+ifeq ($(DETECTED_OS),Windows)
+    MINGW_DIR = $(MSYSTEM_PREFIX)
+    VPI_CMD = $(IVERILOG_VPI) -mingw=$(MINGW_DIR) $(VPI_SRC)
+else
+    VPI_CMD = $(IVERILOG_VPI) $(CFLAGS) $(VPI_SRC)
+endif
 
 # Main target
 .PHONY: all clean build run
@@ -19,7 +34,7 @@ all: run
 # Build VPI shared library
 $(VPI_OUT): $(VPI_SRC)
 	@echo "Building VPI shared library: $@"
-	$(IVERILOG_VPI) $(CFLAGS) $<
+	$(VPI_CMD)
 
 # Compile Verilog sources
 $(VVP_EXEC): $(VERILOG_SRCS) $(VPI_OUT)
