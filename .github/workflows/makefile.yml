@@ -35,7 +35,7 @@ jobs:
       with:
         msystem: ${{ matrix.sys }}
         update: true
-        install: base-devel
+        install: base-devel git
         pacboy: >-
           ghdl-llvm:p
           iverilog:p
