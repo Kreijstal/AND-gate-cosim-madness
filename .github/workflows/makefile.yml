@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  ubuntu-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -22,3 +22,26 @@ jobs:
     - name: Run make run
       run: make run
 
+  windows-build:
+    strategy:
+      matrix:
+        sys: [MINGW64, UCRT64]
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.sys }}
+        update: true
+        install: base-devel
+        pacboy: >-
+          ghdl-llvm:p
+          iverilog:p
+          python-pip:p
+          verilator:p
+
+    - name: Run make
+      shell: msys2 {0}
+      run: make run
