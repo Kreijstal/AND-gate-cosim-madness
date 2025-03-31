@@ -1,4 +1,5 @@
 // Wrap C headers in extern "C" for C++ compatibility
+#define PLI_DLLISPEC
 extern "C" {
 #include "vpi_user.h"
 }
