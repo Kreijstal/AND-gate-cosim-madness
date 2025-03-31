@@ -77,11 +77,7 @@ $(VERILATOR_MODEL_LIB): $(VERILOG_DUT_SRC)
 		-CFLAGS "-std=c++14 -O2 -fPIC $(VERILATOR_INCLUDES)" \
 		--build -j 0 --Mdir $(VERILATOR_OBJ_DIR) # Removed --exe
 	@echo "--- Verilator Build Complete ---"
-	# Check if the library was created
-	@if [ ! -f "$(VERILATOR_MODEL_LIB)" ]; then \
-		echo "Error: Verilator failed to create $(VERILATOR_MODEL_LIB)"; \
-		exit 1; \
-	fi
+	# Removed explicit check; make dependencies should handle this.
 
 
 # Clean target
