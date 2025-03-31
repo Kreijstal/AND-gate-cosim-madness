@@ -32,7 +32,10 @@ run: elaborate
 
 # Clean rule
 clean:
-	$(GHDL) --remove
-	rm -f *.o *.cf *.ghw
+	# Use rm -rf to remove the work directory and its contents
+	# Add '-' before rm to ignore errors if the directory doesn't exist
+	-rm -rf $(WORK_DIR)
+	# Remove other potential output files
+	-rm -f *.o *.ghw
 
 .PHONY: all analyze elaborate run clean
