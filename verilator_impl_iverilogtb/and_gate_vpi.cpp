@@ -148,8 +148,11 @@ void (*vlog_startup_routines[])() = {
     0 // Null terminator
 };
 
-// Provide dummy sc_time_stamp() for Verilator libraries that might need it,
-// especially when not explicitly linking SystemC.
-#ifdef _WIN32 // Or a more specific check if needed
-double sc_time_stamp() { return 0; } // Remove extern "C"
-#endif
+// Provide dummy sc_time_stamp() for Verilator libraries that might need it.
+// This is sometimes required even if SystemC is not directly used.
+// Define it unconditionally.
+// extern "C" // No longer needed as it's C++
+double sc_time_stamp() {
+    // Return a constant time value, as simulation time is managed by Icarus/VPI
+    return 0.0;
+}
