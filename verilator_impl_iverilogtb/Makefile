@@ -66,7 +66,7 @@ $(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB)
 	# Compile manually using g++, specifying VPI paths/libs directly.
 	# Use ${VAR} syntax for paths. Link verilated runtime. Print command.
 	# Adjust -I and -L paths if iverilog is installed elsewhere.
-	$(CXX) $(CXXFLAGS) -I/usr/include/iverilog -shared -o ${VPI_MODULE} ${VPI_SRC} ${VERILATOR_MODEL_LIB} ${VERILATOR_OBJ_DIR}/libverilated.a -L/usr/lib -lvpi -lveriuser
+	$(CXX) $(CXXFLAGS) -I/usr/include/iverilog -shared -o ${VPI_MODULE} ${VPI_SRC} ${VERILATOR_MODEL_LIB} ${VERILATOR_OBJ_DIR}/verilated.a -L/usr/lib -lvpi -lveriuser
 
 # Rule to build the Verilator model static library
 # Depends on the Verilog DUT source
