@@ -21,7 +21,8 @@ obj_dir/
 
 # Icarus Verilog
 *.vvp
-*.vpi
+*.vpi # Generic VPI extension
+and_gate_verilator.vpi # Specific VPI module for this example
 *.vcd
 
 # MyHDL

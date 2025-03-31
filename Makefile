@@ -2,7 +2,7 @@
 
 # Subdirectories
 SUBDIRS = iverilog_pure iverilog_vpitb myhdl verilator verilator_manualtb verilator_vpi_iverilogtb vpi_iverilogtb \
-          dpi-c_verilator dpi-c_verilatortb ghdl_IEEE ghdl_c_IEEE
+          dpi-c_verilator dpi-c_verilatortb ghdl_IEEE ghdl_c_IEEE verilator_impl_iverilogtb
 
 # Phony targets
 .PHONY: all clean $(SUBDIRS) build run
@@ -59,10 +59,13 @@ run_ghdl_IEEE:
 run_ghdl_c_IEEE:
 	@$(MAKE) -C ghdl_c_IEEE
 
+run_verilator_impl_iverilogtb:
+	@$(MAKE) -C verilator_impl_iverilogtb
+
 # Run all implementations
 run: run_iverilog_pure run_iverilog_vpitb run_myhdl run_verilator run_verilator_manualtb \
      run_verilator_vpi_iverilogtb run_vpi_iverilogtb run_dpi-c_verilator run_dpi-c_verilatortb \
-     run_ghdl_IEEE run_ghdl_c_IEEE
+     run_ghdl_IEEE run_ghdl_c_IEEE run_verilator_impl_iverilogtb
 
 # Help target
 help:
@@ -82,4 +85,5 @@ help:
 	@echo "  run_dpi-c_verilatortb    - Run Verilator with DPI-C testbench"
 	@echo "  run_ghdl_IEEE            - Run GHDL IEEE implementation"
 	@echo "  run_ghdl_c_IEEE          - Run GHDL with C interface IEEE implementation"
+	@echo "  run_verilator_impl_iverilogtb - Run Verilator implementation with Icarus Verilog VPI testbench"
 	@echo "  help                     - Show this help message"
