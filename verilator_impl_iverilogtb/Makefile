@@ -61,7 +61,7 @@ $(IVERILOG_OUTPUT): $(VERILOG_TB_SRCS) $(VPI_MODULE)
 
 # Rule to build the VPI shared library
 # Depends on the VPI source and the Verilator-generated static library
-$(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB) ${VERILATOR_OBJ_DIR}/libverilated.a
+$(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB)
 	@echo "--- Building VPI Module (${VPI_MODULE}) ---"
 	# Compile manually using g++ and iverilog-config for VPI paths/libs
 	# Use ${VAR} syntax for paths. Link verilated runtime.
@@ -84,9 +84,9 @@ $(VERILATOR_MODEL_LIB): $(VERILOG_DUT_SRC)
 # Clean target
 clean:
 	@echo "--- Cleaning ---"
-	rm -rf $(VERILATOR_OBJ_DIR) # Remove Verilator build directory
-	rm -f $(VPI_MODULE) # Remove VPI shared library - Corrected space
-	rm -f $(IVERILOG_OUTPUT) # Remove Icarus Verilog output
+	rm -rf ${VERILATOR_OBJ_DIR} # Remove Verilator build directory
+	rm -f ${VPI_MODULE} # Remove VPI shared library
+	rm -f ${IVERILOG_OUTPUT} # Remove Icarus Verilog output
 	rm -f *.o # Remove any stray object files
 	rm -f wave.vcd # Remove waveform file if generated
 	rm -f and_gate_verilator.c # iverilog-vpi intermediate file
