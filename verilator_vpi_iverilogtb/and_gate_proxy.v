@@ -3,13 +3,14 @@
 module and_gate(
     input wire a,
     input wire b,
-    output wire y
+    output reg y // Changed to reg
 );
 
-    // Use the external VPI function for the AND gate
-    // If you want to use a Verilog-based AND gate instead, uncomment the assign statement below
-    assign y = $and_gate(a, b);
-    // assign y = a & b;
+    // Use the external VPI task for the AND gate
+    always @* begin
+        $and_gate(a, b, y); // Call as task with output argument
+    end
+    // assign y = a & b; // Keep commented out
 
 endmodule
 
