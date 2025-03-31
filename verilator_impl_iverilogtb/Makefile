@@ -108,7 +108,8 @@ else
 endif
 	@echo "--- Verilator Build Complete ---"
 	# Touch the targets to ensure Make recognizes they've been updated by the rule
-	touch $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/libverilated.a
+	# Use strip to prevent potential whitespace issues in path construction
+	touch $(VERILATOR_MODEL_LIB) $(strip $(VERILATOR_OBJ_DIR))/libverilated.a
 
 
 # Clean target
