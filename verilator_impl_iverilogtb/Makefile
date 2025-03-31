@@ -63,16 +63,16 @@ $(IVERILOG_OUTPUT): $(VERILOG_TB_SRCS) $(VPI_MODULE)
 
 # Rule to build the VPI shared library
 # Depends on the VPI source and BOTH Verilator-generated static libraries
-$(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/verilated.a
+$(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/libverilated.a
 	@echo "--- Building VPI Module ($(VPI_MODULE)) ---"
 	# Compile manually using g++, specifying VPI paths/libs directly.
 	# Use $(VAR) syntax for paths. Link verilated runtime.
 	# Adjust -I and -L paths if iverilog is installed elsewhere.
-	$(CXX) $(CXXFLAGS) -I/usr/include/iverilog -shared -o $(VPI_MODULE) $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(strip $(VERILATOR_OBJ_DIR))/verilated.a -L/usr/lib -lvpi -lveriuser
+	$(CXX) $(CXXFLAGS) -I/usr/include/iverilog -shared -o $(VPI_MODULE) $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(strip $(VERILATOR_OBJ_DIR))/libverilated.a -L/usr/lib -lvpi -lveriuser
 
 # Rule to build the Verilator model static library AND runtime library
 # Depends on the Verilog DUT source
-$(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/verilated.a: $(VERILOG_DUT_SRC)
+$(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/libverilated.a: $(VERILOG_DUT_SRC)
 	@echo "--- Verilating DUT ($(VERILOG_DUT_SRC)) ---"
 	# Verilate the DUT. Use --build to compile sources into static libraries.
 	# Output goes to VERILATOR_OBJ_DIR.
@@ -82,7 +82,7 @@ $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/verilated.a: $(VERILOG_DUT_SRC)
 		--build -j 0 --Mdir $(VERILATOR_OBJ_DIR)
 	@echo "--- Verilator Build Complete ---"
 	# Touch the targets to ensure Make recognizes they've been updated by the rule
-	touch $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/verilated.a
+	touch $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/libverilated.a
 
 
 # Clean target
