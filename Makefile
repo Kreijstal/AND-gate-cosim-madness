@@ -1,7 +1,7 @@
 # Root Makefile for AND Gate Project
 
 # Subdirectories
-SUBDIRS = iverilog_pure iverilog_vpitb myhdl verilator verilator_manualtb verilator_vpi_iverilogtb vpi_iverilogtb \
+SUBDIRS = iverilog_pure iverilog_vpitb myhdl verilator verilator_manualtb vpi_iverilogtb \
           dpi-c_verilator dpi-c_verilatortb ghdl_IEEE ghdl_c_IEEE verilator_impl_iverilogtb
 
 # Phony targets
@@ -41,8 +41,6 @@ run_verilator:
 run_verilator_manualtb:
 	@$(MAKE) -C verilator_manualtb
 
-run_verilator_vpi_iverilogtb:
-	@$(MAKE) -C verilator_vpi_iverilogtb
 
 run_vpi_iverilogtb:
 	@$(MAKE) -C vpi_iverilogtb
@@ -64,7 +62,7 @@ run_verilator_impl_iverilogtb:
 
 # Run all implementations
 run: run_iverilog_pure run_iverilog_vpitb run_myhdl run_verilator run_verilator_manualtb \
-     run_verilator_vpi_iverilogtb run_vpi_iverilogtb run_dpi-c_verilator run_dpi-c_verilatortb \
+     run_vpi_iverilogtb run_dpi-c_verilator run_dpi-c_verilatortb \
      run_ghdl_IEEE run_ghdl_c_IEEE run_verilator_impl_iverilogtb
 
 # Help target
@@ -79,7 +77,6 @@ help:
 	@echo "  run_myhdl                - Run MyHDL implementation"
 	@echo "  run_verilator            - Run Verilator implementation"
 	@echo "  run_verilator_manualtb   - Run Verilator with manual testbench"
-	@echo "  run_verilator_vpi_iverilogtb - Run Verilator with VPI and Icarus Verilog testbench"
 	@echo "  run_vpi_iverilogtb       - Run VPI with Icarus Verilog testbench"
 	@echo "  run_dpi-c_verilator      - Run Verilator with DPI-C implementation"
 	@echo "  run_dpi-c_verilatortb    - Run Verilator with DPI-C testbench"
