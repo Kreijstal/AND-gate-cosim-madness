@@ -25,9 +25,9 @@ VPI_SRC = and_gate_vpi.cpp
 
 # --- Output Files ---
 VERILATOR_OBJ_DIR = obj_dir_dut # Directory for Verilator generated files for DUT
-VERILATOR_MODEL_LIB = $(VERILATOR_OBJ_DIR)/Vand_gate__ALL.a # Static library from Verilator
+VERILATOR_MODEL_LIB = ${VERILATOR_OBJ_DIR}/Vand_gate__ALL.a # Static library from Verilator
 VPI_MODULE_NAME = and_gate_verilator # Basename for the VPI shared library
-VPI_MODULE = $(VPI_MODULE_NAME).vpi # The final VPI shared library - Corrected space
+VPI_MODULE = ${VPI_MODULE_NAME}.vpi # The final VPI shared library
 IVERILOG_OUTPUT = and_gate_tb.vvp # Compiled Icarus Verilog executable
 
 # --- Verilator Include Paths ---
@@ -61,11 +61,11 @@ $(IVERILOG_OUTPUT): $(VERILOG_TB_SRCS) $(VPI_MODULE)
 
 # Rule to build the VPI shared library
 # Depends on the VPI source and the Verilator-generated static library
-$(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB)
-	@echo "--- Building VPI Module ($(VPI_MODULE_NAME).vpi) ---"
+$(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB) ${VERILATOR_OBJ_DIR}/libverilated.a
+	@echo "--- Building VPI Module (${VPI_MODULE}) ---"
 	# Compile manually using g++ and iverilog-config for VPI paths/libs
-	# Construct paths explicitly and use standard argument order. Link verilated runtime.
-	$(CXX) $(CXXFLAGS) -shared -o $(VPI_MODULE_NAME).vpi $(VPI_SRC) $(VERILATOR_OBJ_DIR)/Vand_gate__ALL.a $(VERILATOR_OBJ_DIR)/libverilated.a $(shell iverilog-config --cflags) $(shell iverilog-config --ldflags --libs)
+	# Use ${VAR} syntax for paths. Link verilated runtime.
+	$(CXX) $(CXXFLAGS) -shared -o ${VPI_MODULE} ${VPI_SRC} ${VERILATOR_MODEL_LIB} ${VERILATOR_OBJ_DIR}/libverilated.a $(shell iverilog-config --cflags) $(shell iverilog-config --ldflags --libs)
 
 # Rule to build the Verilator model static library
 # Depends on the Verilog DUT source
