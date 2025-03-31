@@ -59,8 +59,8 @@ static PLI_INT32 and_gate_vpi_calltf(PLI_BYTE8* user_data) {
         goto cleanup;
     }
     // Check if y is writable (e.g., reg, integer)
-    if (vpi_get(vpiType, y_arg_handle) != vpiReg && vpi_get(vpiType, y_arg_handle) != vpiInteger) {
-         vpi_printf("ERROR: $and_gate VPI: Output argument 'y' must be a writable type (e.g., reg).\n");
+    if (vpi_get(vpiType, y_arg_handle) != vpiReg && vpi_get(vpiType, y_arg_handle) != vpiIntegerVar) { // Use vpiIntegerVar
+         vpi_printf("ERROR: $and_gate VPI: Output argument 'y' must be a writable type (e.g., reg, integer).\n");
          error_occurred = 1;
          goto cleanup;
     }
