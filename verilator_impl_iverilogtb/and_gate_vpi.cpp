@@ -1,4 +1,7 @@
+// Wrap C headers in extern "C" for C++ compatibility
+extern "C" {
 #include "vpi_user.h"
+}
 #include "verilated.h"
 #include "Vand_gate.h" // Include the Verilator-generated header for the AND gate
 
