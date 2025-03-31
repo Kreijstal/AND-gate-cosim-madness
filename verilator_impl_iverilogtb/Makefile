@@ -62,26 +62,27 @@ $(IVERILOG_OUTPUT): $(VERILOG_TB_SRCS) $(VPI_MODULE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(VERILOG_TB_SRCS)
 
 # Rule to build the VPI shared library
-# Depends on the VPI source and the Verilator-generated static library
-$(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB)
-	@echo "--- Building VPI Module ($(VPI_MODULE)) ---" # Use $(VAR)
+# Depends on the VPI source and BOTH Verilator-generated static libraries
+$(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/verilated.a
+	@echo "--- Building VPI Module ($(VPI_MODULE)) ---"
 	# Compile manually using g++, specifying VPI paths/libs directly.
 	# Use $(VAR) syntax for paths. Link verilated runtime.
 	# Adjust -I and -L paths if iverilog is installed elsewhere.
 	$(CXX) $(CXXFLAGS) -I/usr/include/iverilog -shared -o $(VPI_MODULE) $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(strip $(VERILATOR_OBJ_DIR))/verilated.a -L/usr/lib -lvpi -lveriuser
 
-# Rule to build the Verilator model static library
+# Rule to build the Verilator model static library AND runtime library
 # Depends on the Verilog DUT source
-$(VERILATOR_MODEL_LIB): $(VERILOG_DUT_SRC)
+$(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/verilated.a: $(VERILOG_DUT_SRC)
 	@echo "--- Verilating DUT ($(VERILOG_DUT_SRC)) ---"
-	# Verilate the DUT. Use --build to compile sources into a static library.
-	# We specify --exe but don't use the executable, only the library.
+	# Verilate the DUT. Use --build to compile sources into static libraries.
+	# Output goes to VERILATOR_OBJ_DIR.
 	# Output goes to VERILATOR_OBJ_DIR.
 	$(VERILATOR) --cc $(VERILOG_DUT_SRC) --top-module and_gate \
 		-CFLAGS "-std=c++14 -O2 -fPIC $(VERILATOR_INCLUDES)" \
-		--build -j 0 --Mdir $(VERILATOR_OBJ_DIR) # Removed --exe
+		--build -j 0 --Mdir $(VERILATOR_OBJ_DIR)
 	@echo "--- Verilator Build Complete ---"
-	# Removed explicit check; make dependencies should handle this.
+	# Touch the targets to ensure Make recognizes they've been updated by the rule
+	touch $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/verilated.a
 
 
 # Clean target
