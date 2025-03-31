@@ -5,8 +5,28 @@ VERILATOR = verilator
 IVERILOG = iverilog
 VVP = vvp
 CXX = g++
-# Use iverilog-vpi to compile VPI code correctly
-IVERILOG_VPI = iverilog-vpi
+# Use iverilog-vpi to compile VPI code correctly (Removed, using g++ directly again)
+# IVERILOG_VPI = iverilog-vpi
+
+# --- Platform Specific ---
+# Default MINGW_DIR based on MINGW_PREFIX (for MSYS2)
+MINGW_DIR ?= $(MINGW_PREFIX)
+# Default VPI include dir
+VPI_INCLUDE_DIR ?= $(MINGW_DIR)/include/iverilog
+
+# Detect OS
+ifeq ($(OS),Windows_NT)
+    IS_WINDOWS := 1
+    SHARED = -shared
+    VPI_CFLAGS = -I$(VPI_INCLUDE_DIR)
+    VPI_LDFLAGS = -L$(MINGW_DIR)/lib -lvpi -lveriuser -lpthread
+else
+    IS_WINDOWS := 0
+    SHARED = -shared -fPIC # Add -fPIC back for non-Windows
+    VPI_CFLAGS = -I/usr/include/iverilog # Standard Linux path
+    VPI_LDFLAGS = -L/usr/lib -lvpi -lveriuser # Standard Linux libs
+endif
+
 
 # --- Flags ---
 # Verilator flags: Create C++ model, specify top module, optimize
@@ -67,10 +87,8 @@ $(IVERILOG_OUTPUT): $(VERILOG_TB_SRCS) $(VPI_MODULE)
 $(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/libverilated.a
 	@echo "--- Building VPI Module ($(VPI_MODULE)) ---"
 	# Compile manually using g++, specifying VPI paths/libs directly.
-	# Use $(VAR) syntax for paths. Link verilated runtime.
-	# Adjust -I and -L paths if iverilog is installed elsewhere.
-	# Use MINGW_PREFIX for MSYS2 compatibility. Add -lpthread for Windows threading.
-	$(CXX) $(CXXFLAGS) -I$(MINGW_PREFIX)/include/iverilog -shared -o $(VPI_MODULE) $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(strip $(VERILATOR_OBJ_DIR))/libverilated.a -L$(MINGW_PREFIX)/lib -lvpi -lveriuser -lpthread
+	# Use platform-specific flags defined above.
+	$(CXX) $(CXXFLAGS) $(VPI_CFLAGS) $(SHARED) -o $(VPI_MODULE) $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(strip $(VERILATOR_OBJ_DIR))/libverilated.a $(VPI_LDFLAGS)
 
 # Rule to build the Verilator model static library AND runtime library
 # Depends on the Verilog DUT source
@@ -78,10 +96,16 @@ $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/libverilated.a: $(VERILOG_DUT_SRC)
 	@echo "--- Verilating DUT ($(VERILOG_DUT_SRC)) ---"
 	# Verilate the DUT. Use --build to compile sources into static libraries.
 	# Output goes to VERILATOR_OBJ_DIR.
-	# Output goes to VERILATOR_OBJ_DIR.
+	# Use platform-specific CFLAGS for Verilator build (remove -fPIC on Windows)
+ifeq ($(IS_WINDOWS), 1)
+	$(VERILATOR) --cc $(VERILOG_DUT_SRC) --top-module and_gate \
+		-CFLAGS "-std=c++14 -O2 $(VERILATOR_INCLUDES)" \
+		--build -j 0 --Mdir $(VERILATOR_OBJ_DIR)
+else
 	$(VERILATOR) --cc $(VERILOG_DUT_SRC) --top-module and_gate \
 		-CFLAGS "-std=c++14 -O2 -fPIC $(VERILATOR_INCLUDES)" \
 		--build -j 0 --Mdir $(VERILATOR_OBJ_DIR)
+endif
 	@echo "--- Verilator Build Complete ---"
 	# Touch the targets to ensure Make recognizes they've been updated by the rule
 	touch $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/libverilated.a
