@@ -17,6 +17,7 @@ We've got a smorgasbord of simulation flavors for you to taste:
 - Verilator zooming around for those speed demons
 - GHDL bringing some VHDL realness
 - Icarus Verilog for another Verilog perspective
+- **verilator_impl_iverilogtb**: Verilog DUT (Verilator) called from Verilog TB (Icarus) via VPI (C++)
 - VPI and DPI for when you want your languages to have a chat
 
 And the best part? All of these tools are 100% open-source! That's right, we're all about that free and open simulation life here.
