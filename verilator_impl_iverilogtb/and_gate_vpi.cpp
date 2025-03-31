@@ -147,5 +147,5 @@ void (*vlog_startup_routines[])() = {
 // Provide dummy sc_time_stamp() for Verilator libraries that might need it,
 // especially when not explicitly linking SystemC.
 #ifdef _WIN32 // Or a more specific check if needed
-extern "C" double sc_time_stamp() { return 0; }
+double sc_time_stamp() { return 0; } // Remove extern "C"
 #endif
