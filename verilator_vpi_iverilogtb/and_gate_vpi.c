@@ -52,7 +52,10 @@ static PLI_INT32 and_gate_vpi_calltf(PLI_BYTE8* user_data) {
 
     // Set inputs and evaluate the model
     set_and_gate_inputs(and_gate_model, a, b);
-
+    
+    // Ensure model is properly evaluated
+    ((Vand_gate*)and_gate_model)->eval();
+    
     // Get the output
     y = get_and_gate_output(and_gate_model);
 

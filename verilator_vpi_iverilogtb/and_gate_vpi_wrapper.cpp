@@ -16,7 +16,9 @@ void set_and_gate_inputs(void* model, int a, int b) {
     Vand_gate* and_gate = static_cast<Vand_gate*>(model);
     and_gate->a = a;
     and_gate->b = b;
-    and_gate->eval();
+    // Force full evaluation
+    and_gate->eval_step();
+    and_gate->eval_end_step();
 }
 
 int get_and_gate_output(void* model) {

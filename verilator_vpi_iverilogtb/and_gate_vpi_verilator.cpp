@@ -25,8 +25,9 @@ static int and_gate_vpi_calltf(PLI_BYTE8* user_data) {
     vpi_get_value(arg_handle, &value);
     and_gate_model->b = value.value.integer;
 
-    // Evaluate the model
-    and_gate_model->eval();
+    // Force full evaluation
+    and_gate_model->eval_step();
+    and_gate_model->eval_end_step();
 
     // Set the output value
     value.format = vpiIntVal;
