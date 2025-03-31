@@ -64,8 +64,8 @@ $(IVERILOG_OUTPUT): $(VERILOG_TB_SRCS) $(VPI_MODULE)
 $(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB)
 	@echo "--- Building VPI Module ($(VPI_MODULE_NAME).vpi) ---"
 	# Compile manually using g++ and iverilog-config for VPI paths/libs
-	# Construct paths explicitly to avoid expansion issues
-	$(CXX) $(CXXFLAGS) -shared $(VPI_SRC) $(VERILATOR_OBJ_DIR)/Vand_gate__ALL.a -o $(VPI_MODULE_NAME).vpi $(shell iverilog-config --cflags) $(shell iverilog-config --ldflags --libs)
+	# Construct paths explicitly and use standard argument order. Link verilated runtime.
+	$(CXX) $(CXXFLAGS) -shared -o $(VPI_MODULE_NAME).vpi $(VPI_SRC) $(VERILATOR_OBJ_DIR)/Vand_gate__ALL.a $(VERILATOR_OBJ_DIR)/libverilated.a $(shell iverilog-config --cflags) $(shell iverilog-config --ldflags --libs)
 
 # Rule to build the Verilator model static library
 # Depends on the Verilog DUT source
