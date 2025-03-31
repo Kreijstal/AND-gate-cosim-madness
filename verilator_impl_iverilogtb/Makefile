@@ -10,9 +10,8 @@ IVERILOG_VPI = iverilog-vpi
 
 # --- Flags ---
 # Verilator flags: Create C++ model, specify top module, optimize
-VERILATOR_FLAGS = --cc --exe ../common/and_gate.v --top-module and_gate -CFLAGS "-std=c++11" -LDFLAGS "-static" --build -j 0
 # C++ flags: Optimization, Wall, standard, include Verilator headers
-CXXFLAGS = -Wall -Wextra -O2 -std=c++11 -fPIC
+CXXFLAGS = -Wall -Wextra -O2 -std=c++14 -fPIC
 # Icarus Verilog flags: Output file, include directories (if any)
 IVERILOG_FLAGS = -Wall -g2012
 # VVP flags: Specify VPI module(s)
@@ -75,7 +74,7 @@ $(VERILATOR_MODEL_LIB): $(VERILOG_DUT_SRC)
 	# We specify --exe but don't use the executable, only the library.
 	# Output goes to VERILATOR_OBJ_DIR.
 	$(VERILATOR) --cc $(VERILOG_DUT_SRC) --top-module and_gate \
-		-CFLAGS "-std=c++11 -O2 -fPIC $(VERILATOR_INCLUDES)" \
+		-CFLAGS "-std=c++14 -O2 -fPIC $(VERILATOR_INCLUDES)" \
 		--build -j 0 --exe --Mdir $(VERILATOR_OBJ_DIR)
 	@echo "--- Verilator Build Complete ---"
 	# Check if the library was created
