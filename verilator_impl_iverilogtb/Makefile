@@ -75,7 +75,7 @@ $(VERILATOR_MODEL_LIB): $(VERILOG_DUT_SRC)
 	# Output goes to VERILATOR_OBJ_DIR.
 	$(VERILATOR) --cc $(VERILOG_DUT_SRC) --top-module and_gate \
 		-CFLAGS "-std=c++14 -O2 -fPIC $(VERILATOR_INCLUDES)" \
-		--build -j 0 --exe --Mdir $(VERILATOR_OBJ_DIR)
+		--build -j 0 --Mdir $(VERILATOR_OBJ_DIR) # Removed --exe
 	@echo "--- Verilator Build Complete ---"
 	# Check if the library was created
 	@if [ ! -f "$(VERILATOR_MODEL_LIB)" ]; then \
