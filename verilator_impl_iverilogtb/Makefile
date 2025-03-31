@@ -11,7 +11,8 @@ IVERILOG_VPI = iverilog-vpi
 # --- Flags ---
 # Verilator flags: Create C++ model, specify top module, optimize
 # C++ flags: Optimization, Wall, standard, include Verilator headers
-CXXFLAGS = -Wall -Wextra -O2 -std=c++14 -fPIC
+# Remove -fPIC for Windows/MinGW shared library build
+CXXFLAGS = -Wall -Wextra -O2 -std=c++14
 # Icarus Verilog flags: Output file, include directories (if any)
 IVERILOG_FLAGS = -Wall -g2012
 # VVP flags: Specify VPI module(s)
