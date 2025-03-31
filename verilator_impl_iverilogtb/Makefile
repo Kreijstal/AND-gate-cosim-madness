@@ -25,9 +25,11 @@ VPI_SRC = and_gate_vpi.cpp
 
 # --- Output Files ---
 VERILATOR_OBJ_DIR = obj_dir_dut # Directory for Verilator generated files for DUT
-VERILATOR_MODEL_LIB = $(VERILATOR_OBJ_DIR)/Vand_gate__ALL.a # Static library from Verilator (Use $(VAR) consistently)
+# Strip potential whitespace from components before concatenating
+VERILATOR_MODEL_LIB = $(strip $(VERILATOR_OBJ_DIR))/Vand_gate__ALL.a
 VPI_MODULE_NAME = and_gate_verilator # Basename for the VPI shared library
-VPI_MODULE = $(VPI_MODULE_NAME).vpi # The final VPI shared library (Use $(VAR) consistently and ensure no space)
+# Strip potential whitespace from components before concatenating
+VPI_MODULE = $(strip $(VPI_MODULE_NAME)).vpi
 IVERILOG_OUTPUT = and_gate_tb.vvp # Compiled Icarus Verilog executable
 
 # --- Verilator Include Paths ---
@@ -62,16 +64,16 @@ $(IVERILOG_OUTPUT): $(VERILOG_TB_SRCS) $(VPI_MODULE)
 # Rule to build the VPI shared library
 # Depends on the VPI source and the Verilator-generated static library
 $(VPI_MODULE): $(VPI_SRC) $(VERILATOR_MODEL_LIB)
-	@echo "--- Building VPI Module (${VPI_MODULE}) ---"
+	@echo "--- Building VPI Module ($(VPI_MODULE)) ---" # Use $(VAR)
 	# Compile manually using g++, specifying VPI paths/libs directly.
-	# Use ${VAR} syntax for paths. Link verilated runtime. Print command.
+	# Use $(VAR) syntax for paths. Link verilated runtime. Print command. # Corrected comment
 	# Adjust -I and -L paths if iverilog is installed elsewhere.
 	@echo "--- Debug VPI Build Command ---"
 	@echo "CXX                  = $(CXX)"
 	@echo "CXXFLAGS             = $(CXXFLAGS)"
-	@echo "VPI_MODULE           = ${VPI_MODULE}"
-	@echo "VPI_SRC              = ${VPI_SRC}"
-	@echo "VERILATOR_MODEL_LIB  = ${VERILATOR_MODEL_LIB}"
+	@echo "VPI_MODULE           = $(VPI_MODULE)" # Use $(VAR)
+	@echo "VPI_SRC              = $(VPI_SRC)" # Use $(VAR)
+	@echo "VERILATOR_MODEL_LIB  = $(VERILATOR_MODEL_LIB)" # Use $(VAR)
 	@echo "VERILATOR_OBJ_DIR    = $(VERILATOR_OBJ_DIR)"
 	@echo "Full command:"
 	@echo "$(CXX) $(CXXFLAGS) -I/usr/include/iverilog -shared -o $(VPI_MODULE) $(VPI_SRC) $(VERILATOR_MODEL_LIB) $(VERILATOR_OBJ_DIR)/verilated.a -L/usr/lib -lvpi -lveriuser"
