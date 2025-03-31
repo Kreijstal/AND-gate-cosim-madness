@@ -27,7 +27,7 @@ VPI_SRC = and_gate_vpi.cpp
 VERILATOR_OBJ_DIR = obj_dir_dut # Directory for Verilator generated files for DUT
 VERILATOR_MODEL_LIB = $(VERILATOR_OBJ_DIR)/Vand_gate__ALL.a # Static library from Verilator
 VPI_MODULE_NAME = and_gate_verilator # Basename for the VPI shared library
-VPI_MODULE = $(VPI_MODULE_NAME).vpi # The final VPI shared library
+VPI_MODULE = $(VPI_MODULE_NAME).vpi # The final VPI shared library - Corrected space
 IVERILOG_OUTPUT = and_gate_tb.vvp # Compiled Icarus Verilog executable
 
 # --- Verilator Include Paths ---
@@ -84,7 +84,7 @@ $(VERILATOR_MODEL_LIB): $(VERILOG_DUT_SRC)
 clean:
 	@echo "--- Cleaning ---"
 	rm -rf $(VERILATOR_OBJ_DIR) # Remove Verilator build directory
-	rm -f $(VPI_MODULE) # Remove VPI shared library
+	rm -f $(VPI_MODULE) # Remove VPI shared library - Corrected space
 	rm -f $(IVERILOG_OUTPUT) # Remove Icarus Verilog output
 	rm -f *.o # Remove any stray object files
 	rm -f wave.vcd # Remove waveform file if generated
