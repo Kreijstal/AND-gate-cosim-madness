@@ -129,6 +129,8 @@ static PLI_INT32 cleanup_callback(p_cb_data cb_data) {
 
 // Register cleanup callback
 static void register_cleanup() {
+    //ucommenting this results in segfaults for windows
+    /*
     s_cb_data cb_data_s;
     cb_data_s.reason = cbEndOfSimulation;
     cb_data_s.cb_rtn = cleanup_callback;
@@ -136,7 +138,7 @@ static void register_cleanup() {
     cb_data_s.time = NULL;
     cb_data_s.value = NULL;
     cb_data_s.user_data = NULL;
-    vpi_register_cb(&cb_data_s);
+    vpi_register_cb(&cb_data_s);*/
 }
 
 
