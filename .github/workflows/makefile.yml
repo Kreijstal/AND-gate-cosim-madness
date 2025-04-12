@@ -16,7 +16,7 @@ jobs:
     - name: Install HDL tools and dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y ghdl-gcc iverilog python3-pip
+        sudo apt-get install -y ghdl-llvm iverilog python3-pip clang
         pip3 install --upgrade pip
 
     - name: Run make run
