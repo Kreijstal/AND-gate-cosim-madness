@@ -4,7 +4,6 @@
 GHDL = ghdl
 VERILATOR = verilator
 CXX = g++
-# MAKE = make # No longer needed explicitly for Verilator build
 
 # --- OS Detection and Platform-Specific Flags ---
 ifeq ($(OS),Windows_NT)
@@ -38,8 +37,8 @@ VERILATOR_VLTSTD ?= $(VERILATOR_ROOT)/include/vltstd
 
 # --- Flags ---
 GHDL_FLAGS = --std=08
-# *** Use --build to automatically compile the generated C++ code ***
-VERILATOR_FLAGS = --cc --Mdir obj_dir --compiler gcc --build
+# Add --CFLAGS -DVL_TIME_CONTEXT to pass the define to the C++ compiler used by Verilator's build
+VERILATOR_FLAGS = --cc --Mdir obj_dir --compiler gcc --build --CFLAGS "-DVL_TIME_CONTEXT"
 CXXFLAGS = -std=c++14 $(F_PIC) -Iobj_dir -I$(VERILATOR_INC) -I$(VERILATOR_VLTSTD)
 
 # --- Source files ---
@@ -51,7 +50,6 @@ WRAPPER_SRC = and_gate_verilated.cpp
 VHDL_OBJ = work-obj08.cf
 VERILATED_LIB_NAME = Vand_gate__ALL.a # Base name of the archive
 VERILATED_OBJ = obj_dir/$(VERILATED_LIB_NAME)
-# VERILATOR_MAKEFILE = obj_dir/Vand_gate.mk # No longer needed directly in this rule
 WRAPPER_OBJ = and_gate_verilated.o
 
 # --- Top-level entity ---
@@ -69,7 +67,6 @@ $(VERILATED_OBJ): $(VERILOG_SRC)
 	$(VERILATOR) $(VERILATOR_FLAGS) $<
 	# Ensure the target file actually exists after the build
 	@test -f $@ || (echo "Error: Verilator build failed to produce $@"; exit 1)
-
 
 # Compile C++ wrapper (depends on Verilated headers existing, which $(VERILATED_OBJ) ensures)
 $(WRAPPER_OBJ): $(WRAPPER_SRC) $(VERILATED_OBJ)
