@@ -11,33 +11,43 @@
 *.exe
 *.out
 *.app
+# Project-specific executables (based on Makefiles)
+and_gate_tb
+Vand_gate_proxy
+Vand_gate_tb
 
-# Verilator
-obj_dir/
-
+# Simulation & Synthesis Tool Files
 # GHDL
 *.cf
 *.ghw
-
 # Icarus Verilog
 *.vvp
-*.vpi # Generic VPI extension
-and_gate_verilator.vpi # Specific VPI module for this example
+*.vpi
+# Verilator
+**/obj_dir/
+**/obj_dir*/
+# Waveform files
 *.vcd
+*.fst
+*.lxt
 
-# MyHDL
-myhdl/
+# Python / MyHDL
 *.pyc
 __pycache__/
+# Consider if 'myhdl/' directory itself should be ignored,
+# or just specific generated files within it.
+# myhdl/
 
-# Temporary files
+# Temporary & Backup files
 *.log
 *.tmp
-
-# Editor-specific files
-.vscode/
-*.swp
+*.bak
 *~
+*.swp
+
+# Editor/IDE specific files
+.vscode/
+.idea/
 
 # Build directories
 build/
@@ -46,24 +56,6 @@ bin/
 # Generated files
 *.gen
 
-# Waveform files
-*.vcd
-*.fst
-*.lxt
-
-# Backup files
-*.bak
-
 # OS-specific files
 .DS_Store
 Thumbs.db
-
-# Project-specific executables (based on your Makefiles)
-and_gate_tb
-Vand_gate_proxy
-Vand_gate_tb
-
-# Ignore all files in the root directory without extension (likely executables)
-/*
-!/*/
-!*.*
