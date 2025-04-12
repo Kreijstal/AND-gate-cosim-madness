@@ -1,0 +1,28 @@
+{
+  "name": "Arch Linux Codespace",
+  "image": "archlinux:latest",
+
+  // Install basic tools needed for development and Codespaces
+  // Note: Running pacman requires root privileges.
+  "postCreateCommand": "pacman -Syu --noconfirm && pacman -S --noconfirm bash git sudo",
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Ensure bash is the default shell
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash"
+          }
+        }
+      }
+      // Add any desired VS Code extensions here
+      // "extensions": []
+    }
+  },
+
+  // Run as root to allow pacman commands during setup.
+  // Consider creating a non-root user for better security later if needed.
+  "remoteUser": "root"
+}
