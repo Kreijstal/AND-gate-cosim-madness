@@ -15,8 +15,8 @@ jobs:
 
     - name: Install HDL tools and dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y ghdl-llvm iverilog python3-pip clang
+        sudo apt-get update #unfortunately ghdl-gcc or mcode are not that great for cosim.
+        sudo apt-get install -y ghdl-llvm iverilog python3-pip clang llvm
         pip3 install --upgrade pip
 
     - name: Run make run
