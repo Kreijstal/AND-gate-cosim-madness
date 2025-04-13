@@ -2,14 +2,29 @@
   "name": "Arch Linux Codespace",
   "image": "archlinux:latest",
 
-  // Install basic tools needed for development and Codespaces
-  // Note: Running pacman requires root privileges.
-  "postCreateCommand": "pacman -Syu --noconfirm && pacman -S --noconfirm bash git sudo",
+  // Features are a better way to add tools like git and gh
+  "features": {
+    // Installs GitHub CLI and handles authentication setup
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    // Optional: Common utils installs git, curl, etc. Might be redundant if gh installs git.
+    // Check if gh feature includes git, otherwise add common-utils or keep git in pacman.
+    // Let's assume gh feature handles git or we keep it below for now.
+    // "ghcr.io/devcontainers/features/common-utils:2": {
+    //   "installGit": true,
+    //   "configureGit": false // Let gh handle config or do it manually if needed
+    // }
+  },
+
+  // Install base tools, create user, setup sudo
+  // Removed 'git' from pacman install - let the feature handle it if possible,
+  // or add it back if the gh feature doesn't install it.
+  // The gh feature runs *after* the base image is ready but typically *before* postCreateCommand or alongside it.
+  // User creation needs to happen so the feature/remoteUser works.
+  "postCreateCommand": "pacman -Syu --noconfirm && pacman -S --noconfirm bash sudo && useradd -m -G wheel -s /bin/bash codespace && echo 'codespace ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/codespace",
 
   "customizations": {
     "vscode": {
       "settings": {
-        // Ensure bash is the default shell
         "terminal.integrated.defaultProfile.linux": "bash",
         "terminal.integrated.profiles.linux": {
           "bash": {
@@ -17,12 +32,31 @@
           }
         }
       }
-      // Add any desired VS Code extensions here
-      // "extensions": []
     }
   },
 
-  // Run as root to allow pacman commands during setup.
-  // Consider creating a non-root user for better security later if needed.
-  "remoteUser": "root"
+  // Use the non-root user instead of root
+  "remoteUser": "codespace"
+
+  // Optional but Recommended: Add postStartCommand to explicitly configure git using gh
+  // This runs *as* the remoteUser ('codespace') every time the container starts.
+  // Use this if the 'github-cli' feature alone doesn't set user.name/user.email.
+  // "postStartCommand": "if ! git config --global --get user.name; then gh auth setup-git; fi"
+  // A more explicit version using gh api:
+  /*
+  "postStartCommand": "if ! git config --global --get user.name; then \
+      echo 'Configuring Git user name and email using gh api...'; \
+      GH_USER_NAME=$(gh api user --jq '.name // .login'); \
+      GH_USER_EMAIL=$(gh api user/emails --jq '.[] | select(.primary == true and .verified == true) | .email'); \
+      if [ -n \"$GH_USER_NAME\" ] && [ -n \"$GH_USER_EMAIL\" ]; then \
+        git config --global user.name \"$GH_USER_NAME\"; \
+        git config --global user.email \"$GH_USER_EMAIL\"; \
+        echo 'Git configured successfully.'; \
+      else \
+        echo 'Warning: Could not automatically configure Git user. Please run git config manually.'; \
+      fi; \
+    else \
+      echo 'Git user already configured.'; \
+    fi"
+  */
 }
