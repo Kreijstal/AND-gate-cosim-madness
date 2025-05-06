@@ -2,19 +2,12 @@
   "name": "Arch Linux Codespace",
   "image": "archlinux:latest",
 
-  "features": {
-    // Installs GitHub CLI (which includes/requires git) and handles authentication setup.
-    "ghcr.io/devcontainers/features/github-cli:1": {}
-  },
-
-  // Install base tools, create user, setup sudo.
-  // 'git' is expected to be installed by the 'github-cli' feature.
-  "postCreateCommand": "pacman -Syu --noconfirm && pacman -S --noconfirm bash sudo && useradd -m -G wheel -s /bin/bash codespace && echo 'codespace ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/codespace && chmod 0440 /etc/sudoers.d/codespace",
+  // Install base tools (bash, sudo), git, GitHub CLI, create user, setup sudo.
+  // This is now a single, valid JSON string.
+  "postCreateCommand": "pacman -Syu --noconfirm && pacman -S --noconfirm bash sudo git github-cli && useradd -m -G wheel -s /bin/bash codespace && echo 'codespace ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/codespace && chmod 0440 /etc/sudoers.d/codespace",
 
   // This command runs every time the codespace starts.
   // It ensures git user.name and user.email are set using Codespaces environment variables.
-  // Newlines within the command are represented as \n to make it a valid JSON string.
-  // Quotes within the shell command that need to be part of the string are escaped as \".
   "postStartCommand": "if ! git config --global --get user.name || ! git config --global --get user.email; then\n  echo 'Configuring Git user name and email using Codespaces environment variables...';\n  git config --global user.name \"${GIT_COMMITTER_NAME}\";\n  git config --global user.email \"${GIT_COMMITTER_EMAIL}\";\n  echo \"Git configured with user: ${GIT_COMMITTER_NAME}, email: ${GIT_COMMITTER_EMAIL}\";\nelse\n  echo 'Git user name and email already configured.';\nfi",
 
   "customizations": {
