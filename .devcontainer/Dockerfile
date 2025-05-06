@@ -3,7 +3,7 @@ FROM archlinux:latest
 # Update and install base dependencies, sudo, git, and github-cli
 # Also install 'which' as it's often used by scripts and might be missing
 RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm bash sudo git github-cli which && \
+    pacman -S --noconfirm bash sudo git github-cli which less && \
     # Clean up pacman cache
     pacman -Scc --noconfirm
 
