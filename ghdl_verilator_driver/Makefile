@@ -37,8 +37,43 @@ TB_SOURCE = and_gate_tb.cpp
 GHDL_LIB_NAME_PLAIN = andgatec
 SHARED_LIB_ARCHIVE = lib$(GHDL_LIB_NAME_PLAIN).a # Static library archive
 # Set GHDL VPI specific linker flags
-# Found via `find /usr/lib /lib -name "libghdlvpi.so*"` -> /usr/lib/ghdl/mcode/libghdlvpi.so
-VPI_LIB_DIR := /usr/lib/ghdl/mcode
+# Attempt to get GHDL VPI library path using the modern command
+VPI_LIB_DIR_DETECTED = $(shell $(GHDL) --print-vpi-library-dir 2>/dev/null)
+
+# Common default for GHDL mcode (Debian/Ubuntu style). This might need adjustment for other systems/distros.
+COMMON_DEFAULT_VPI_LIB_DIR = /usr/lib/ghdl/mcode
+
+# Use detected path if available, otherwise let user override or use common default.
+# The `?=` ensures that if VPI_LIB_DIR is passed via `make VPI_LIB_DIR=/custom/path`, it's used first.
+# If VPI_LIB_DIR is not passed from environment, it then considers VPI_LIB_DIR_DETECTED.
+# If VPI_LIB_DIR_DETECTED is empty, it falls back to COMMON_DEFAULT_VPI_LIB_DIR.
+VPI_LIB_DIR ?= $(firstword $(VPI_LIB_DIR_DETECTED) $(COMMON_DEFAULT_VPI_LIB_DIR))
+
+# Issue warnings or info messages based on how VPI_LIB_DIR was determined
+ifeq ($(strip $(VPI_LIB_DIR_DETECTED)),)
+  # --print-vpi-library-dir failed or returned empty
+  ifneq ($(strip $(VPI_LIB_DIR)), $(strip $(COMMON_DEFAULT_VPI_LIB_DIR)))
+    # User provided a VPI_LIB_DIR, and it's different from the common default. This is good.
+    $(info GHDL VPI library path auto-detection failed. Using user-provided VPI_LIB_DIR: $(VPI_LIB_DIR))
+  else
+    # Auto-detection failed, and VPI_LIB_DIR is the COMMON_DEFAULT_VPI_LIB_DIR (meaning user didn't override to something else).
+    $(warning GHDL VPI library path auto-detection with '--print-vpi-library-dir' failed.)
+    $(warning Using default VPI_LIB_DIR: $(VPI_LIB_DIR). If this is incorrect for your system, please set VPI_LIB_DIR manually.)
+    $(warning For example: make VPI_LIB_DIR=/path/to/your/ghdl_backend/vpi)
+  endif
+else
+  # --print-vpi-library-dir succeeded
+  ifeq ($(strip $(VPI_LIB_DIR)), $(strip $(VPI_LIB_DIR_DETECTED)))
+      # We are using the auto-detected path (either VPI_LIB_DIR was not set by user, or user set it to the same detected path).
+      $(info GHDL VPI library path detected by --print-vpi-library-dir: $(VPI_LIB_DIR))
+  else
+      # Auto-detection worked, but user provided a different VPI_LIB_DIR. User's choice takes precedence.
+      $(info GHDL VPI library path detected as "$(VPI_LIB_DIR_DETECTED)", but using user-provided VPI_LIB_DIR: "$(VPI_LIB_DIR)")
+  endif
+endif
+
+# Ensure GHDL_VPI_LDFLAGS uses this VPI_LIB_DIR. This definition should already exist and be correct.
+# GHDL_VPI_LDFLAGS = -L$(VPI_LIB_DIR) -lghdlvpi -Wl,-rpath,$(VPI_LIB_DIR)
 GHDL_VPI_LDFLAGS = -L$(VPI_LIB_DIR) -lghdlvpi -Wl,-rpath,$(VPI_LIB_DIR)
 VERILATED_DIR = obj_dir
 TOP_MODULE = and_gate_proxy # Verilator top module (matches SV filename usually)
