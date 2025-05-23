@@ -37,7 +37,7 @@ $(VHDL_OBJ): $(VHDL_SRC) $(C_OBJ)
 
 # Elaborate
 $(TOP_ENTITY): $(VHDL_OBJ) $(C_OBJ)
-	$(GHDL) -e $(GHDL_FLAGS) -Wl,$(C_OBJ) $(TOP_ENTITY)
+	$(GHDL) -e $(GHDL_FLAGS) $(TOP_ENTITY) ./$(C_OBJ)
 
 # Run
 run: $(TOP_ENTITY)
