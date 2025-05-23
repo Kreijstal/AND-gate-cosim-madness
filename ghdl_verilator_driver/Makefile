@@ -73,7 +73,6 @@ else
 endif
 
 # Ensure GHDL_VPI_LDFLAGS uses this VPI_LIB_DIR. This definition should already exist and be correct.
-# GHDL_VPI_LDFLAGS = -L$(VPI_LIB_DIR) -lghdlvpi -Wl,-rpath,$(VPI_LIB_DIR)
 GHDL_VPI_LDFLAGS = -L$(VPI_LIB_DIR) -lghdlvpi -Wl,-rpath,$(VPI_LIB_DIR)
 VERILATED_DIR = obj_dir
 TOP_MODULE = and_gate_proxy # Verilator top module (matches SV filename usually)
