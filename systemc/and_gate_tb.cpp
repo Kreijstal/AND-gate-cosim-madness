@@ -1,4 +1,5 @@
 #include <systemc.h>
+#include <iostream> // Added for std::cout
 #include "and_gate.cpp" // Include the AND gate module
 
 SC_MODULE(testbench) {
@@ -12,26 +13,30 @@ SC_MODULE(testbench) {
         // Test case 1: 0 & 0 = 0
         input_a = false;
         input_b = false;
-        wait(1, SC_NS);
-        sc_assert(output_z == false);
+        wait(1, SC_NS); // Wait for outputs to settle after 1ns
+        std::cout << sc_time_stamp() << ": Test: a=" << input_a.read() << ", b=" << input_b.read() << " -> out=" << output_z.read() << " (Expected: " << false << ")" << std::endl;
+        sc_assert(output_z.read() == false);
 
         // Test case 2: 0 & 1 = 0
         input_a = false;
         input_b = true;
         wait(1, SC_NS);
-        sc_assert(output_z == false);
+        std::cout << sc_time_stamp() << ": Test: a=" << input_a.read() << ", b=" << input_b.read() << " -> out=" << output_z.read() << " (Expected: " << false << ")" << std::endl;
+        sc_assert(output_z.read() == false);
 
         // Test case 3: 1 & 0 = 0
         input_a = true;
         input_b = false;
         wait(1, SC_NS);
-        sc_assert(output_z == false);
+        std::cout << sc_time_stamp() << ": Test: a=" << input_a.read() << ", b=" << input_b.read() << " -> out=" << output_z.read() << " (Expected: " << false << ")" << std::endl;
+        sc_assert(output_z.read() == false);
 
         // Test case 4: 1 & 1 = 1
         input_a = true;
         input_b = true;
         wait(1, SC_NS);
-        sc_assert(output_z == true);
+        std::cout << sc_time_stamp() << ": Test: a=" << input_a.read() << ", b=" << input_b.read() << " -> out=" << output_z.read() << " (Expected: " << true << ")" << std::endl;
+        sc_assert(output_z.read() == true);
 
         SC_REPORT_INFO("Testbench", "All test cases passed!");
         sc_stop(); // End simulation
