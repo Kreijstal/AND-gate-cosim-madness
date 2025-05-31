@@ -55,3 +55,27 @@ If you're stuck, confused, or just want to share your AND gate epiphanies:
 Remember, in cosimulation as in life, sometimes you just need to AND it all together and see what happens!
 
 Happy simulating, and may your gates always be logical! 🧠💻
+
+## SystemC Example
+
+This directory contains a simple 2-input AND gate implemented and tested using SystemC.
+
+### Directory Structure
+
+- `systemc/`: Contains the SystemC source files and Makefile.
+  - `and_gate.cpp`: SystemC module for the AND gate.
+  - `and_gate_tb.cpp`: SystemC testbench for the AND gate.
+  - `Makefile`: Makefile to compile and run the SystemC simulation.
+
+### Running the Simulation
+
+To run the SystemC simulation:
+1. Navigate to the `systemc` directory:
+   ```bash
+   cd systemc
+   ```
+2. Compile and run the simulation using make:
+   ```bash
+   make run
+   ```
+This will compile the SystemC code and execute the testbench. The testbench will print messages indicating the status of the test cases.
