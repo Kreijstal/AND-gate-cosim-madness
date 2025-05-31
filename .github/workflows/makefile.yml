@@ -37,7 +37,7 @@ jobs:
     - name: Install HDL tools and dependencies
       run: |
         sudo apt-get update #unfortunately ghdl-gcc or mcode are not that great for cosim.
-        sudo apt-get install -y ghdl-llvm iverilog python3-pip clang 
+        sudo apt-get install -y ghdl-llvm iverilog python3-pip clang libsystemc-dev
         pip3 install --upgrade pip
 
     - name: Run make run
@@ -62,6 +62,7 @@ jobs:
           iverilog:p
           python-pip:p
           verilator:p
+          systemc:p
 
     - name: Run make
       shell: msys2 {0}
