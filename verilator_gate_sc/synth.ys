@@ -1,0 +1,5 @@
+# Yosys synthesis script
+read_verilog and_gate.v
+synth -top and_gate
+flatten
+write_verilog and_gate_netlist.v
