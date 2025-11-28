@@ -1,0 +1,14 @@
+# Compiled SystemC simulation binary
+and_gate_sim
+
+# Object files
+*.o
+
+# Other potential build artifacts
+*.dwo
+*.gcno
+*.gcda
+sc_trace.*
+
+# Temporary hello_world binary
+hello_world
