@@ -1,7 +1,10 @@
 # Amaranth + Cocotb testbench
 
 PYTHON := $(shell command -v python3 >/dev/null 2>&1 && echo python3 || echo python)
-SIM ?= iverilog
+SIM ?= icarus
+ifneq ($(filter iverilog,$(SIM)),)
+  SIM := icarus
+endif
 
 TOPLEVEL_LANG = verilog
 TOPLEVEL = and_gate
@@ -28,7 +31,7 @@ $(VERILOG_OUT): $(AMARANTH_SRC)
 
 include $(COCOTB_MAKEFILE)
 
-clean:
+clean::
 	@echo "Cleaning up generated files"
 	rm -f $(VERILOG_OUT) results.xml
 	rm -rf sim_build

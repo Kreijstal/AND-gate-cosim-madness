@@ -68,10 +68,7 @@ jobs:
         echo "OSS_CAD_BIN=$(pwd)/oss-cad-suite/bin" >> "$GITHUB_ENV"
 
     - name: Run make run
-      env:
-        YOSYS: ${{ env.OSS_CAD_BIN }}/yosys
-        YOSYS_CONFIG: ${{ env.OSS_CAD_BIN }}/yosys-config
-      run: make run
+      run: make run YOSYS=${{ env.OSS_CAD_BIN }}/yosys YOSYS_CONFIG=${{ env.OSS_CAD_BIN }}/yosys-config
 
   windows-build:
     strategy:
