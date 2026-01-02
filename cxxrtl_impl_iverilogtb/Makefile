@@ -52,7 +52,12 @@ ifeq ($(strip $(YOSYS_DATDIR)),)
     YOSYS_DATDIR := /usr/share/yosys
   endif
 endif
-CXXRTL_INC = -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
+ROOT_DIR := $(abspath ..)
+LOCAL_CXXRTL_DIR := $(ROOT_DIR)/cxxrtl_runtime
+CXXRTL_INC = -I$(YOSYS_DATDIR)/include -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
+ifneq ($(wildcard $(LOCAL_CXXRTL_DIR)/cxxrtl/cxxrtl.h),)
+  CXXRTL_INC = -I$(LOCAL_CXXRTL_DIR) $(CXXRTL_INC)
+endif
 
 # --- Targets ---
 .PHONY: all build run clean
