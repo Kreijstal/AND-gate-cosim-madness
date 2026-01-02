@@ -3,7 +3,8 @@
 # Subdirectories
 SUBDIRS = iverilog_pure iverilog_vpitb myhdl verilator verilator_manualtb vpi_iverilogtb \
           dpi-c_verilator dpi-c_verilatortb ghdl_IEEE ghdl_c_IEEE verilator_impl_iverilogtb \
-          ghdl_verilator_driver
+          ghdl_verilator_driver cxxrtl cxxrtl_impl_iverilogtb \
+          verilator_impl_cxxrtltb cxxrtl_impl_verilatortb
 
 # Phony targets
 .PHONY: all clean $(SUBDIRS) build run
@@ -68,11 +69,24 @@ run_ghdl_verilator_driver:
 run_verilator_impl_iverilogtb:
 	@$(MAKE) -C verilator_impl_iverilogtb
 
+run_cxxrtl:
+	@$(MAKE) -C cxxrtl
+
+run_cxxrtl_impl_iverilogtb:
+	@$(MAKE) -C cxxrtl_impl_iverilogtb
+
+run_verilator_impl_cxxrtltb:
+	@$(MAKE) -C verilator_impl_cxxrtltb
+
+run_cxxrtl_impl_verilatortb:
+	@$(MAKE) -C cxxrtl_impl_verilatortb
+
 # Run all implementations
 run: run_iverilog_pure run_iverilog_vpitb run_myhdl run_verilator run_verilator_manualtb \
      run_vpi_iverilogtb run_dpi-c_verilator run_dpi-c_verilatortb \
      run_ghdl_IEEE run_ghdl_c_IEEE run_verilator_impl_iverilogtb run_verilator_ghdltb \
-     run_ghdl_verilator_driver
+     run_ghdl_verilator_driver run_cxxrtl run_cxxrtl_impl_iverilogtb \
+     run_verilator_impl_cxxrtltb run_cxxrtl_impl_verilatortb
 
 # Help target
 help:
@@ -94,4 +108,8 @@ help:
 	@echo "  run_ghdl_c_IEEE          - Run GHDL with C interface IEEE implementation"
 	@echo "  run_ghdl_verilator_driver - Run GHDL and Verilator with VHPIDIRECT and DPI-C"
 	@echo "  run_verilator_impl_iverilogtb - Run Verilator implementation with Icarus Verilog VPI testbench"
+	@echo "  run_cxxrtl               - Run CXXRTL (Yosys backend) implementation"
+	@echo "  run_cxxrtl_impl_iverilogtb - Run CXXRTL implementation with Icarus Verilog VPI testbench"
+	@echo "  run_verilator_impl_cxxrtltb - Run Verilator DUT with CXXRTL reference (C++ cosim)"
+	@echo "  run_cxxrtl_impl_verilatortb - Run CXXRTL DUT with Verilator reference (C++ cosim)"
 	@echo "  help                     - Show this help message"

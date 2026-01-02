@@ -1,7 +1,7 @@
 # Makefile for Verilator implementation with Icarus Verilog VPI testbench
 
 # --- Tools ---
-VERILATOR = verilator
+VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 IVERILOG = iverilog
 VVP = vvp
 CXX = g++

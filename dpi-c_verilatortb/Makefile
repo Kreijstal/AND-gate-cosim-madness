@@ -1,8 +1,7 @@
 # Makefile for Verilator DPI-C project with Verilog testbench
 
 # Verilator command
-VERILATOR = verilator
-
+VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 # Verilator flags
 VERILATOR_FLAGS = --cc --exe --main --sv --timing
 

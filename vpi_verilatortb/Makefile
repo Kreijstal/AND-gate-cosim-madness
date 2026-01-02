@@ -1,7 +1,7 @@
 # Makefile for VPI Verilator project
 
 # Verilator and C++ compiler settings
-VERILATOR = verilator
+VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 CXX = g++
 CXXFLAGS = -Wall -O2
 VERILATOR_FLAGS = --cc --exe --vpi

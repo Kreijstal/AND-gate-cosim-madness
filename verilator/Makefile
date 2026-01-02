@@ -1,6 +1,6 @@
 # Variables for Verilator
-VERILATOR = verilator
-VERILATOR_FLAGS = --main --exe --build -Wall -Wno-TIMESCALEMOD --timing
+VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
+VERILATOR_FLAGS = --main --exe --build -Wall -Wno-TIMESCALEMOD -Wno-UNUSEDSIGNAL --timing
 
 # Sources
 SRC_DIR = ../common

@@ -2,7 +2,7 @@
 
 # --- Tools ---
 GHDL = ghdl
-VERILATOR = verilator
+VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 CXX = g++
 
 # --- OS Detection and Platform-Specific Flags ---

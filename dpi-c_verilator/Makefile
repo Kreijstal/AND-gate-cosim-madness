@@ -1,8 +1,7 @@
 # Makefile for Verilator DPI-C project
 
 # Verilator command
-VERILATOR = verilator
-
+VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 # Verilator flags
 VERILATOR_FLAGS = --cc --exe --sv -CFLAGS -DVL_TIME_CONTEXT
 

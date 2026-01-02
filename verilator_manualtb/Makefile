@@ -1,4 +1,4 @@
-VERILATOR = verilator
+VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 VERILATOR_FLAGS = -Wall --trace --cc --exe -CFLAGS -DVL_TIME_CONTEXT
 CXX = g++
 CXXFLAGS = -Wall -g

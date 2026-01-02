@@ -15,6 +15,10 @@ We've got a smorgasbord of simulation flavors for you to taste:
 - C and C++ crashing the HDL party
 - Python sneaking in with MyHDL
 - Verilator zooming around for those speed demons
+- CXXRTL via Yosys for a lightweight C++ cycle-based sim
+- CXXRTL called from an Icarus VPI testbench
+- Verilator DUT checked against a CXXRTL reference (C++ cosim)
+- CXXRTL DUT checked against a Verilator reference (C++ cosim)
 - GHDL bringing some VHDL realness
 - Icarus Verilog for another Verilog perspective
 - **verilator_impl_iverilogtb**: Verilog DUT (Verilator) called from Verilog TB (Icarus) via VPI (C++)
