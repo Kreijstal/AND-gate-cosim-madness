@@ -21,9 +21,14 @@ ifeq ($(strip $(YOSYS_DATDIR)),)
 endif
 ROOT_DIR := $(abspath ..)
 LOCAL_CXXRTL_DIR := $(ROOT_DIR)/cxxrtl_runtime
-CXXRTL_INC := -I$(YOSYS_DATDIR)/include -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
-ifneq ($(wildcard $(LOCAL_CXXRTL_DIR)/cxxrtl/cxxrtl.h),)
-  CXXRTL_INC := -I$(LOCAL_CXXRTL_DIR) $(CXXRTL_INC)
+CXXRTL_SYS_HDR1 := $(YOSYS_DATDIR)/include/backends/cxxrtl/cxxrtl.h
+CXXRTL_SYS_HDR2 := $(YOSYS_DATDIR)/include/backends/cxxrtl/runtime/cxxrtl/cxxrtl.h
+ifneq ($(strip $(wildcard $(CXXRTL_SYS_HDR1) $(CXXRTL_SYS_HDR2))),)
+  CXXRTL_INC := -I$(YOSYS_DATDIR)/include -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
+else ifneq ($(wildcard $(LOCAL_CXXRTL_DIR)/cxxrtl/cxxrtl.h),)
+  CXXRTL_INC := -I$(LOCAL_CXXRTL_DIR)
+else
+  CXXRTL_INC := -I$(YOSYS_DATDIR)/include -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
 endif
 
 .PHONY: all run clean
