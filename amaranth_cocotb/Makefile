@@ -1,6 +1,6 @@
 # Amaranth + Cocotb testbench
 
-PYTHON ?= python3
+PYTHON := $(shell command -v python3 >/dev/null 2>&1 && echo python3 || echo python)
 SIM ?= iverilog
 
 TOPLEVEL_LANG = verilog
