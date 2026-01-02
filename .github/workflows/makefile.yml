@@ -65,9 +65,12 @@ jobs:
           *.tgz|*.tar.gz) tar -xzf "$ASSET_NAME" -C oss-cad-suite --strip-components=1 ;;
           *) echo "Unknown oss-cad-suite archive: $ASSET_NAME" >&2; exit 1 ;;
         esac
-        echo "$(pwd)/oss-cad-suite/bin" >> "$GITHUB_PATH"
+        echo "OSS_CAD_BIN=$(pwd)/oss-cad-suite/bin" >> "$GITHUB_ENV"
 
     - name: Run make run
+      env:
+        YOSYS: ${{ env.OSS_CAD_BIN }}/yosys
+        YOSYS_CONFIG: ${{ env.OSS_CAD_BIN }}/yosys-config
       run: make run
 
   windows-build:

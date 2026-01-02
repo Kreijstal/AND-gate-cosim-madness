@@ -11,7 +11,11 @@ AMARANTH_SRC = and_gate_amaranth.py
 VERILOG_OUT = and_gate_amaranth.v
 VERILOG_SOURCES = $(CURDIR)/$(VERILOG_OUT)
 
-COCOTB_MAKEFILE := $(shell $(PYTHON) -c "import cocotb, os; print(os.path.join(os.path.dirname(cocotb.__file__), 'share', 'makefiles', 'Makefile.sim'))")
+COCOTB_MAKEFILES := $(shell cocotb-config --makefiles 2>/dev/null)
+ifeq ($(strip $(COCOTB_MAKEFILES)),)
+  COCOTB_MAKEFILES := $(shell $(PYTHON) -c "import cocotb_tools, os; print(os.path.join(os.path.dirname(cocotb_tools.__file__), 'makefiles'))" 2>/dev/null)
+endif
+COCOTB_MAKEFILE := $(COCOTB_MAKEFILES)/Makefile.sim
 
 .PHONY: all clean
 
