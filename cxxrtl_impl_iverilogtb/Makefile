@@ -54,9 +54,9 @@ ifeq ($(strip $(YOSYS_DATDIR)),)
 endif
 ROOT_DIR := $(abspath ..)
 LOCAL_CXXRTL_DIR := $(ROOT_DIR)/cxxrtl_runtime
-CXXRTL_INC = -I$(YOSYS_DATDIR)/include -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
+CXXRTL_INC := -I$(YOSYS_DATDIR)/include -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
 ifneq ($(wildcard $(LOCAL_CXXRTL_DIR)/cxxrtl/cxxrtl.h),)
-  CXXRTL_INC = -I$(LOCAL_CXXRTL_DIR) $(CXXRTL_INC)
+  CXXRTL_INC := -I$(LOCAL_CXXRTL_DIR) $(CXXRTL_INC)
 endif
 
 # --- Targets ---
