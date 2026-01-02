@@ -62,6 +62,8 @@ amaranth_cocotb/results.xml
 # Xilinx synth-only outputs
 xilinx_synth/*.edif
 xilinx_synth/*.json
+# Xilinx synth netlist simulation outputs
+xilinx_synth_sim/and_gate_synth.v
 
 # OS-specific files
 .DS_Store
