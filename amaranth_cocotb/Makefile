@@ -1,14 +1,7 @@
 # Amaranth + Cocotb testbench
 
 PYTHON := $(shell command -v python3 >/dev/null 2>&1 && echo python3 || echo python)
-UNAME_S := $(shell uname -s 2>/dev/null)
-ifneq (,$(findstring MINGW,$(UNAME_S)))
-  SIM ?= verilator
-else ifneq (,$(findstring MSYS,$(UNAME_S)))
-  SIM ?= verilator
-else
-  SIM ?= iverilog
-endif
+SIM ?= iverilog
 
 TOPLEVEL_LANG = verilog
 TOPLEVEL = and_gate
