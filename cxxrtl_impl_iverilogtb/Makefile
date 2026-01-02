@@ -53,7 +53,7 @@ ifeq ($(strip $(YOSYS_DATDIR)),)
   endif
 endif
 CXXRTL_SYS_HDR_OLD := $(YOSYS_DATDIR)/include/backends/cxxrtl/cxxrtl.h
-CXXRTL_SYS_HDR_NEW := $(YOSYS_DATDIR)/include/cxxrtl/cxxrtl.h
+CXXRTL_SYS_HDR_NEW := $(YOSYS_DATDIR)/include/backends/cxxrtl/runtime/cxxrtl/cxxrtl.h
 ifneq ($(wildcard $(CXXRTL_SYS_HDR_NEW)),)
   CXXRTL_INC := -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
 else ifneq ($(wildcard $(CXXRTL_SYS_HDR_OLD)),)

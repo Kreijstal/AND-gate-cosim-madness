@@ -37,8 +37,17 @@ jobs:
     - name: Install HDL tools and dependencies
       run: |
         sudo apt-get update #unfortunately ghdl-gcc or mcode are not that great for cosim.
-        sudo apt-get install -y ghdl-llvm iverilog python3-pip clang yosys
+        sudo apt-get install -y ghdl-llvm iverilog python3-pip clang bison flex libreadline-dev tcl-dev
         pip3 install --upgrade pip
+    - name: Build and install Yosys (v0.56)
+      run: |
+        curl -L -o yosys.tar.gz https://github.com/YosysHQ/yosys/releases/download/v0.56/yosys.tar.gz
+        mkdir -p yosys-src
+        tar -xzf yosys.tar.gz -C yosys-src
+        cd yosys-src
+        make config-gcc
+        make -j"$(nproc)"
+        sudo make install PREFIX=/usr/local
 
     - name: Run make run
       run: make run
