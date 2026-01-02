@@ -1,4 +1,4 @@
-# Verilator DUT with CXXRTL reference model (C++ cosim)
+# Verilator DUT with CXXRTL-driven testbench (C++ cosim)
 
 VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 YOSYS = yosys
@@ -6,7 +6,8 @@ YOSYS_CONFIG ?= yosys-config
 
 COMMON_DIR = ../common
 VERILOG_DUT_SRC = $(COMMON_DIR)/and_gate.v
-CXXRTL_CPP = and_gate.cpp
+CXXRTL_SRC = cxxrtl_driver.v
+CXXRTL_CPP = cxxrtl_driver.cpp
 TB_CPP = and_gate_tb.cpp
 OBJ_DIR = obj_dir
 TB_BIN = $(OBJ_DIR)/Vand_gate
@@ -33,9 +34,9 @@ endif
 
 all: run
 
-$(CXXRTL_CPP): $(VERILOG_DUT_SRC)
-	@echo "--- Generating CXXRTL model ($(CXXRTL_CPP)) ---"
-	$(YOSYS) -p "read_verilog $(VERILOG_DUT_SRC); write_cxxrtl $(CXXRTL_CPP)"
+$(CXXRTL_CPP): $(CXXRTL_SRC)
+	@echo "--- Generating CXXRTL driver ($(CXXRTL_CPP)) ---"
+	$(YOSYS) -p "read_verilog $(CXXRTL_SRC); write_cxxrtl $(CXXRTL_CPP)"
 
 $(TB_BIN): $(VERILOG_DUT_SRC) $(TB_CPP) $(CXXRTL_CPP)
 	@echo "--- Building Verilator model with CXXRTL TB ---"
@@ -44,7 +45,7 @@ $(TB_BIN): $(VERILOG_DUT_SRC) $(TB_CPP) $(CXXRTL_CPP)
 		-CFLAGS "-std=c++17 -O2 -DVL_TIME_CONTEXT $(CXXRTL_INC)"
 
 run: $(TB_BIN)
-	@echo "--- Running Verilator DUT with CXXRTL reference ---"
+	@echo "--- Running Verilator DUT with CXXRTL-driven TB ---"
 	./$(TB_BIN)
 
 clean:
