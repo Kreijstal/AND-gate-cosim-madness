@@ -4,7 +4,7 @@
 VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 CXX = g++
 CXXFLAGS = -Wall -O2
-VERILATOR_FLAGS = --cc --exe --vpi
+VERILATOR_FLAGS = --cc --exe --vpi -CFLAGS -DVL_TIME_CONTEXT
 
 # Project files
 VERILOG_SRC = and_gate_proxy.v

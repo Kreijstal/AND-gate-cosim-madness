@@ -3,7 +3,7 @@
 # Verilator command
 VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 # Verilator flags
-VERILATOR_FLAGS = --cc --exe --main --sv --timing
+VERILATOR_FLAGS = --cc --exe --main --sv --timing -CFLAGS -DVL_TIME_CONTEXT
 
 # Source files
 VERILOG_SRC = and_gate_proxy.sv ../common/and_gate_tb.v
