@@ -2,6 +2,7 @@
 
 # --- Tools ---
 YOSYS = yosys
+YOSYS_CONFIG ?= yosys-config
 IVERILOG = iverilog
 VVP = vvp
 CXX = g++
@@ -43,7 +44,14 @@ VPI_MODULE = $(VPI_MODULE_NAME).vpi
 IVERILOG_OUTPUT = and_gate_tb.vvp
 
 # --- CXXRTL Include Paths ---
-YOSYS_DATDIR = $(shell yosys-config --datdir)
+YOSYS_DATDIR := $(shell $(YOSYS_CONFIG) --datdir 2>/dev/null)
+ifeq ($(strip $(YOSYS_DATDIR)),)
+  ifneq ($(strip $(MSYSTEM_PREFIX)),)
+    YOSYS_DATDIR := $(MSYSTEM_PREFIX)/share/yosys
+  else
+    YOSYS_DATDIR := /usr/share/yosys
+  endif
+endif
 CXXRTL_INC = -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
 
 # --- Targets ---

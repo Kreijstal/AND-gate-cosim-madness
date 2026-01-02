@@ -3,6 +3,16 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -O2 -g -Wall -Wextra
 YOSYS = yosys
+YOSYS_CONFIG ?= yosys-config
+
+YOSYS_DATDIR := $(shell $(YOSYS_CONFIG) --datdir 2>/dev/null)
+ifeq ($(strip $(YOSYS_DATDIR)),)
+  ifneq ($(strip $(MSYSTEM_PREFIX)),)
+    YOSYS_DATDIR := $(MSYSTEM_PREFIX)/share/yosys
+  else
+    YOSYS_DATDIR := /usr/share/yosys
+  endif
+endif
 
 SRC_DIR = ../common
 VERILOG_SRC = $(SRC_DIR)/and_gate.v
@@ -20,7 +30,7 @@ $(CXXRTL_SRC): $(VERILOG_SRC)
 
 $(TB_BIN): $(CXXRTL_SRC) $(TB_SRC)
 	@echo "Compiling CXXRTL testbench: $@"
-	$(CXX) $(CXXFLAGS) -I "$(shell yosys-config --datdir)/include/backends/cxxrtl/runtime" $(TB_SRC) -o $(TB_BIN)
+	$(CXX) $(CXXFLAGS) -I "$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime" $(TB_SRC) -o $(TB_BIN)
 
 run: $(TB_BIN)
 	@echo "Running CXXRTL testbench"

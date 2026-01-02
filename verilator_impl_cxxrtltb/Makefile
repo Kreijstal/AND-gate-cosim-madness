@@ -2,6 +2,7 @@
 
 VERILATOR ?= $(or $(wildcard /usr/bin/verilator),verilator)
 YOSYS = yosys
+YOSYS_CONFIG ?= yosys-config
 
 COMMON_DIR = ../common
 VERILOG_DUT_SRC = $(COMMON_DIR)/and_gate.v
@@ -10,7 +11,14 @@ TB_CPP = and_gate_tb.cpp
 OBJ_DIR = obj_dir
 TB_BIN = $(OBJ_DIR)/Vand_gate
 
-YOSYS_DATDIR = $(shell yosys-config --datdir)
+YOSYS_DATDIR := $(shell $(YOSYS_CONFIG) --datdir 2>/dev/null)
+ifeq ($(strip $(YOSYS_DATDIR)),)
+  ifneq ($(strip $(MSYSTEM_PREFIX)),)
+    YOSYS_DATDIR := $(MSYSTEM_PREFIX)/share/yosys
+  else
+    YOSYS_DATDIR := /usr/share/yosys
+  endif
+endif
 CXXRTL_INC = -I$(YOSYS_DATDIR)/include/backends/cxxrtl/runtime
 
 .PHONY: all run clean
