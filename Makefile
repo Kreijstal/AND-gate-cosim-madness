@@ -5,7 +5,7 @@ SUBDIRS = iverilog_pure iverilog_vpitb myhdl verilator verilator_manualtb vpi_iv
           dpi-c_verilator dpi-c_verilatortb ghdl_IEEE ghdl_c_IEEE verilator_impl_iverilogtb \
           ghdl_verilator_driver cxxrtl cxxrtl_impl_iverilogtb \
           verilator_impl_cxxrtltb cxxrtl_impl_verilatortb amaranth_cocotb \
-          amaranth_sim amaranth_extsim
+          amaranth_sim amaranth_extsim xilinx_synth
 
 # Phony targets
 .PHONY: all clean $(SUBDIRS) build run
@@ -87,6 +87,8 @@ run_amaranth_sim:
 	@$(MAKE) -C amaranth_sim
 run_amaranth_extsim:
 	@$(MAKE) -C amaranth_extsim
+run_xilinx_synth:
+	@$(MAKE) -C xilinx_synth
 
 # Run all implementations
 run: run_iverilog_pure run_iverilog_vpitb run_myhdl run_verilator run_verilator_manualtb \
@@ -94,7 +96,7 @@ run: run_iverilog_pure run_iverilog_vpitb run_myhdl run_verilator run_verilator_
      run_ghdl_IEEE run_ghdl_c_IEEE run_verilator_impl_iverilogtb run_verilator_ghdltb \
      run_ghdl_verilator_driver run_cxxrtl run_cxxrtl_impl_iverilogtb \
      run_verilator_impl_cxxrtltb run_cxxrtl_impl_verilatortb run_amaranth_cocotb \
-     run_amaranth_sim run_amaranth_extsim
+     run_amaranth_sim run_amaranth_extsim run_xilinx_synth
 
 # Help target
 help:
@@ -123,4 +125,5 @@ help:
 	@echo "  run_amaranth_cocotb    - Run Amaranth design with Cocotb testbench"
 	@echo "  run_amaranth_sim       - Run Amaranth pure simulator testbench"
 	@echo "  run_amaranth_extsim    - Run Amaranth simulator with external backend hooks"
+	@echo "  run_xilinx_synth       - Run Yosys synth-only flow for Xilinx"
 	@echo "  help                     - Show this help message"
