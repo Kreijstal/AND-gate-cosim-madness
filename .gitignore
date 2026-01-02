@@ -55,6 +55,9 @@ bin/
 
 # Generated files
 *.gen
+amaranth_cocotb/and_gate_amaranth.v
+amaranth_cocotb/sim_build/
+amaranth_cocotb/results.xml
 
 # OS-specific files
 .DS_Store
