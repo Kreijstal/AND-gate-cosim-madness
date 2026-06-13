@@ -23,6 +23,7 @@ We've got a smorgasbord of simulation flavors for you to taste:
 - Icarus Verilog for another Verilog perspective
 - **verilator_impl_iverilogtb**: Verilog DUT (Verilator) called from Verilog TB (Icarus) via VPI (C++)
 - VPI and DPI for when you want your languages to have a chat
+- AND gate implemented as an analog device by Ngspice, with Verilog testbench
 
 And the best part? All of these tools are 100% open-source! That's right, we're all about that free and open simulation life here.
 

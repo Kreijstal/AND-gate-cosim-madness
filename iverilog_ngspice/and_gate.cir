@@ -1,0 +1,19 @@
+Diode logic AND gate that may be driven by Verilog.
+
+.param vcc=3.3
+
+Vcc vcc 0 {vcc}
+
+Va a 0 0 external
+Da y a diode
+
+Vb b 0 0 external
+Db y b diode
+
+Rb y vcc 10k
+
+.model diode d
+
+.tran 10ns 20u
+
+.end
